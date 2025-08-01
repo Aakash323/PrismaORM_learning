@@ -20,7 +20,7 @@ model User {
   createdAt DateTime  @default(now())
   password  String
   purchases Product[] @relation("UserPurchases")  // user can purchase multiple products
-  reviews   Review[]
+  reviews   Review[]      // user can give multiple reviews and name is used when a model has many relations.
 }
 
 model Product {
@@ -28,7 +28,7 @@ model Product {
   pname     String
   price     Int
   user_id   Int
-  user      User      @relation("UserPurchases", fields: [user_id], references: [id], onDelete: Cascade)
+  user      User      @relation("UserPurchases", fields: [user_id], references: [id], onDelete: Cascade) //cascade are used so when parent is deleted child also deletes
   reviews   Review[]
 }
 
