@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-
 }
 
 datasource db {
@@ -14,17 +13,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User{
-  id Int @id @default(autoincrement())
-  name String?
-  email String @unique
-  createdAt DateTime @default(now())
-  password String
-  purchase Product[]
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  createdAt DateTime  @default(now())
+  password  String
+  purchases Product[] @relation("UserPurchases")  // user can purchase multiple products
+  reviews   Review[]
 }
 
-model Product{
-pid Int @id
-
-
+model Product {
+  pid       Int       @id @default(autoincrement())
+  pname     String
+  price     Int
+  user_id   Int
+  user      User      @relation("UserPurchases", fields: [user_id], references: [id], onDelete: Cascade)
+  reviews   Review[]
 }
+
+model Review {
+  rid         Int       @id @default(autoincrement())
+  review_u_id Int
+  review_p_id Int
+  user        User      @relation(fields: [review_u_id], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [review_p_id], references: [pid], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+}
+
