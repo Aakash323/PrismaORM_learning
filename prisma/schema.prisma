@@ -34,10 +34,12 @@ model Product {
 
 model Review {
   rid         Int       @id @default(autoincrement())
+  rev         String
   review_u_id Int
   review_p_id Int
   user        User      @relation(fields: [review_u_id], references: [id], onDelete: Cascade)
   product     Product   @relation(fields: [review_p_id], references: [pid], onDelete: Cascade)
   createdAt   DateTime  @default(now())
+    @@unique([review_u_id, review_p_id])
 }
 
